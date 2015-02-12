@@ -20,7 +20,7 @@
 default['chef-server-cluster']['topology'] = 'tier'
 default['chef-server-cluster']['role'] = 'frontend'
 default['chef-server-cluster']['bootstrap']['enable'] = false
-default['chef-server-cluster']['chef-provisioner-key-name'] = 'hc-metal-provisioner-chef-aws-us-west-2'
+default['chef-server-cluster']['chef-provisioner-key-name'] = 'lauck-metal-provisioner'
 
 # these use _ instead of - because it maps to the machine_options in
 # chef-provisioning-fog.
@@ -29,7 +29,7 @@ default['chef-server-cluster']['aws']['machine_options'] = {
                       :ssh_username => 'ubuntu',
                       :use_private_ip_for_ssh => false,
                       :bootstrap_options => {
-                                             :key_name => 'hc-metal-provisioner',
+                                             :key_name => 'lauck-metal-provisioner',
                                              :image_id => 'ami-b99ed989',
                                              :flavor_id => 'm3.medium'
                                             }
