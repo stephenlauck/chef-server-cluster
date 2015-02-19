@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef-server-cluster
-# Recipes:: default
+# Recipes:: cluster-clean
 #
 # Author: Joshua Timberman <joshua@getchef.com>
 # Copyright (C) 2014, Chef Software, Inc. <legal@getchef.com>
@@ -18,21 +18,8 @@
 # limitations under the License.
 #
 
-directory '/etc/opscode' do
-  mode 0755
-  recursive true
-end
+include_recipe 'chef-server-cluster::setup-provisioner'
 
-directory '/etc/opscode-analytics' do
-  recursive true
+machine 'standalone' do
+  action :destroy
 end
-
-directory '/etc/opscode-reporting' do
-  recursive true
-end
-
-chef_server_ingredient 'chef-server-core' do
-  notifies :reconfigure, 'chef_server_ingredient[chef-server-core]'
-end
-
-include_recipe 'emacs'

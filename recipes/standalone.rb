@@ -36,6 +36,7 @@ api_fqdn '#{node['fqdn']}'
 dark_launch['actions'] = true
 rabbitmq['vip'] = '#{node['ipaddress']}'
 rabbitmq['node_ip_address'] = '0.0.0.0'
+nginx['enable_non_ssl'] = true
 EOH
   notifies :reconfigure, 'chef_server_ingredient[chef-server-core]'
 end

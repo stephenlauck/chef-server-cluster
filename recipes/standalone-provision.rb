@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: chef-server-cluster
-# Recipes:: default
+# Recipes:: cluster-provision
 #
 # Author: Joshua Timberman <joshua@getchef.com>
 # Copyright (C) 2014, Chef Software, Inc. <legal@getchef.com>
@@ -17,22 +17,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This recipe is run on the provisioner node. It creates all the other nodes using chef-provisioning.
 
-directory '/etc/opscode' do
-  mode 0755
-  recursive true
+include_recipe 'chef-server-cluster::setup-provisioner'
+include_recipe 'chef-server-cluster::setup-ssh-keys'
+
+machine 'standalone' do
+  recipe 'chef-server-cluster::standalone'
+  ohai_hints 'ec2' => '{}'
+  action :converge
+  converge true
 end
-
-directory '/etc/opscode-analytics' do
-  recursive true
-end
-
-directory '/etc/opscode-reporting' do
-  recursive true
-end
-
-chef_server_ingredient 'chef-server-core' do
-  notifies :reconfigure, 'chef_server_ingredient[chef-server-core]'
-end
-
-include_recipe 'emacs'
