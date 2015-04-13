@@ -1,42 +1,57 @@
 ---
 driver:
   name: vagrant
-  customize:
-    memory: 512
+  ssh:
+    insert_key: false
+  synced_folders:
+    - ["/tmp/opscode-analytics", "/etc/opscode-analytics"]
 
 provisioner:
   name: chef_zero
 
 platforms:
   - name: ubuntu-14.04
+  - name: centos-6.6
 
 suites:
-  - name: fullstack
-    run_list:
-      - recipe[chef-server-cluster::default]
-    attributes:
-      ec:
-        couchdb:
-          enable: true
+- name: standalone
+  run_list:
+  - recipe[test::hostsfile]
+  - recipe[chef-server]
+  - recipe[chef-server::add_ons]
+  - recipe[test::default_user_and_org]
+  driver:
+    vm_hostname: chef.example.com
+    network:
+      - ['private_network', {ip: '33.33.33.10'}]
+  attributes:
+    chef-server:
+      api_fqdn: 'chef.example.com'
+      analytics:
+        fqdn: 'analytics.example.com'
+      add_ons:
+        - opscode-manage
+        - opscode-reporting
+        - opscode-push-jobs-server
+      configuration:
+        oc_id:
+          applications:
+            analytics:
+              redirect_uri: 'https://analytics.example.com/'
         rabbitmq:
-          enable: true
-        postgresql:
-          enable: true
-        oc_bifrost:
-          enable: true
-        opscode_certificate:
-          enable: true
-        opscode_account:
-          enable: true
-        opscode_solr:
-          enable: true
-        opscode_expander:
-          enable: true
-        bookshelf:
-          enable: true
-        opscode_org_creator:
-          enable: true
-        opscode_erchef:
-          enable: true
-        opscode_webui:
-          enable: true
+          vip: '33.33.33.10'
+          node_ip_address: '0.0.0.0'
+
+- name: analytics
+  run_list:
+  - recipe[test::hostsfile]
+  - recipe[chef-server::analytics]
+  driver:
+    vm_hostname: analytics.example.com
+    network:
+      - ['private_network', {ip: '33.33.33.11'}]
+  attributes:
+    chef-server:
+      api_fqdn: 'chef.example.com'
+      analytics:
+        fqdn: 'analytics.example.com'
