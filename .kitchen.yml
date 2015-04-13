@@ -18,7 +18,7 @@ suites:
   run_list:
   - recipe[test::hostsfile]
   - recipe[chef-server]
-  - recipe[chef-server::add_ons]
+  - recipe[chef-server::addons]
   - recipe[test::default_user_and_org]
   driver:
     vm_hostname: chef.example.com
@@ -29,7 +29,7 @@ suites:
       api_fqdn: 'chef.example.com'
       analytics:
         fqdn: 'analytics.example.com'
-      add_ons:
+      addons:
         - opscode-manage
         - opscode-reporting
         - opscode-push-jobs-server
