@@ -1,4 +1,4 @@
-chef_server_user 'flock' do
+chef_server_cluster_user 'flock' do
   firstname 'Florian'
   lastname 'Lock'
   email 'ops@example.com'
@@ -7,13 +7,13 @@ chef_server_user 'flock' do
   action :create
 end
 
-chef_server_org 'example' do
+chef_server_cluster_org 'example' do
   org_long_name 'Example Organization'
   org_private_key_path '/tmp/example-validator.pem'
   action :create
 end
 
-chef_server_org 'example' do
+chef_server_cluster_org 'example' do
   admins %w{ flock }
   action :add_admin
 end
